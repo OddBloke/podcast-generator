@@ -1,5 +1,6 @@
 extern crate tempdir;
 
+use std::ffi::OsStr;
 use std::fs;
 use std::io;
 
@@ -16,6 +17,10 @@ fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<Podcas
         let entry = try!(entry);
         if try!(fs::metadata(entry.path())).is_dir() {
             continue;
+        }
+        match entry.path().extension() {
+            Some(x) if x == OsStr::new("mp3") => (),
+            _ => continue,
         }
         items.push(PodcastItem {});
     }
@@ -49,7 +54,23 @@ mod test {
 
     #[test]
     fn list_single_item() {
-        let tmpdir = setup_tmpdir_with_items(vec!["first"]);
+        let tmpdir = setup_tmpdir_with_items(vec!["first.mp3"]);
+
+        let items = get_target_items(tmpdir.path()).unwrap();
+        assert_eq!(1, items.len())
+    }
+
+    #[test]
+    fn non_mp3_files_ignored() {
+        let tmpdir = setup_tmpdir_with_items(vec!["first.mp3", "second.not"]);
+
+        let items = get_target_items(tmpdir.path()).unwrap();
+        assert_eq!(1, items.len())
+    }
+
+    #[test]
+    fn non_extension_files_ignored() {
+        let tmpdir = setup_tmpdir_with_items(vec!["first.mp3", "second"]);
 
         let items = get_target_items(tmpdir.path()).unwrap();
         assert_eq!(1, items.len())
