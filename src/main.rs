@@ -1,5 +1,6 @@
 extern crate docopt;
 extern crate tempdir;
+extern crate xml;
 
 use std::env;
 use std::io;
@@ -8,6 +9,7 @@ use std::path::Path;
 use docopt::Docopt;
 
 mod collect;
+mod podcast;
 
 #[cfg(test)]
 mod test_helpers;

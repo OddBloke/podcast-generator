@@ -3,9 +3,7 @@ use std::fs;
 use std::io;
 use std::path;
 
-pub struct PodcastItem {
-    pub name: String,
-}
+use podcast::PodcastItem;
 
 pub fn get_target_items(target_directory: &path::Path) -> io::Result<Vec<PodcastItem>> {
     let mut items = Vec::new();
