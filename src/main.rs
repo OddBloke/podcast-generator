@@ -31,17 +31,12 @@ fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<Podcas
 }
 
 #[cfg(test)]
-mod test {
-    use std::collections::HashSet;
+mod test_helpers {
     use std::fs::File;
-    use std::io;
-    use std::path::Path;
 
     use tempdir::TempDir;
 
-    use get_target_items;
-
-    fn setup_tmpdir_with_items(items: &Vec<&str>) -> TempDir {
+    pub fn setup_tmpdir_with_items(items: &Vec<&str>) -> TempDir {
         let tmpdir = TempDir::new("test").expect("create temp dir");
         for filename in items {
             let full_path = tmpdir.path().join(filename);
@@ -49,6 +44,17 @@ mod test {
         }
         tmpdir
     }
+}
+
+#[cfg(test)]
+mod test {
+    use std::collections::HashSet;
+    use std::io;
+    use std::path::Path;
+
+    use get_target_items;
+
+    use test_helpers::setup_tmpdir_with_items;
 
     #[test]
     fn list_nonexistent_directory_returns_error() {
