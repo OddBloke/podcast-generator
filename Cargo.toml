@@ -1,0 +1,8 @@
+[package]
+name = "podcast-generator"
+version = "0.1.0"
+authors = ["Daniel Watkins <daniel@daniel-watkins.co.uk>"]
+
+[dependencies]
+tempdir = "^0.3"
+xml-rs = "^0.3.5"
