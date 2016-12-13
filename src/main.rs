@@ -14,7 +14,7 @@ struct PodcastItem {
 
 fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<PodcastItem>> {
     let mut items = Vec::new();
-    let entries = fs::read_dir(target_directory).unwrap();
+    let entries = try!(fs::read_dir(target_directory));
     for entry in entries {
         let entry = entry.unwrap();
         let path = entry.path();
@@ -36,6 +36,8 @@ fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<Podcas
 mod test {
     use std::collections::HashSet;
     use std::fs::File;
+    use std::io;
+    use std::path::Path;
 
     use tempdir::TempDir;
 
@@ -48,6 +50,15 @@ mod test {
             File::create(full_path).expect("create file");
         }
         tmpdir
+    }
+
+    #[test]
+    fn list_nonexistent_directory_returns_error() {
+        match get_target_items(Path::new("/nope")) {
+            Result::Ok(_) => panic!("Should fail against missing directory"),
+            Result::Err(err) => assert_eq!(io::ErrorKind::NotFound,
+                                           err.kind()),
+        }
     }
 
     #[test]
