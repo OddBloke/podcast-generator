@@ -12,10 +12,10 @@ struct PodcastItem {}
 
 fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<PodcastItem>> {
     let mut items = Vec::new();
-    let entries = try!(fs::read_dir(target_directory));
+    let entries = fs::read_dir(target_directory).unwrap();
     for entry in entries {
-        let entry = try!(entry);
-        if try!(fs::metadata(entry.path())).is_dir() {
+        let entry = entry.unwrap();
+        if fs::metadata(entry.path()).unwrap().is_dir() {
             continue;
         }
         match entry.path().extension() {
