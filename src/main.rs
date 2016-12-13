@@ -25,9 +25,7 @@ fn get_target_items(target_directory: &std::path::Path) -> io::Result<Vec<Podcas
             Some(x) if x == OsStr::new("mp3") => (),
             _ => continue,
         }
-        items.push(PodcastItem {
-            name: String::from(
-                      path.file_name().unwrap().to_str().unwrap())});
+        items.push(PodcastItem { name: String::from(path.file_name().unwrap().to_str().unwrap()) });
     }
     Ok(items)
 }
@@ -56,8 +54,7 @@ mod test {
     fn list_nonexistent_directory_returns_error() {
         match get_target_items(Path::new("/nope")) {
             Result::Ok(_) => panic!("Should fail against missing directory"),
-            Result::Err(err) => assert_eq!(io::ErrorKind::NotFound,
-                                           err.kind()),
+            Result::Err(err) => assert_eq!(io::ErrorKind::NotFound, err.kind()),
         }
     }
 
